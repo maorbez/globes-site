@@ -6,7 +6,7 @@ const WA_NUMBER = '972548026123';
 const SITE_URL = window.location.href.split('?')[0];
 
 // ← החלף בכתובת המייל האמיתית של המשרד
-const CONTACT_EMAIL = 'info@globesrealestate.co.il';
+const CONTACT_EMAIL = 'maor.globes@gmail.com';
 
 // ---- Security: HTML escaping to prevent XSS ----
 function esc(s) {
