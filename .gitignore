@@ -1,0 +1,50 @@
+# scratch & build scripts (contain secrets — never commit)
+s*.js
+build_dashboard.js
+a1.js
+b.js
+m1.js
+p1.js
+p2.js
+x.js
+doit.js
+apply.js
+runner.js
+step1.js
+01_analyze.js
+analyze.js
+part1.js
+diagnose*.js
+review*.js
+final_review.js
+screenshot.*
+verify_contact.js
+*.py
+
+# notion / api payloads & schema
+*payload*.json
+search*.json
+add_*.json
+fix_*.json
+test_*.json
+update_*.json
+db_schema.json
+out*.json
+out*.txt
+t.txt
+snip_b64.txt
+
+# screenshots & review dirs
+*.png
+rev*_*/
+final_*/
+review_*/
+
+# local admin tool — not for public deploy
+admin.html
+
+# os / env
+.DS_Store
+.env
+.env.*
+node_modules/

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>דירות למכירה ולהשכרה בנווה צדק | גלובס נכסים</title>
+  <meta name="description" content="דירות למכירה ולהשכרה בנווה צדק — השכונה היוקרתית ביותר בתל אביב. ממוצע ₪89,000 למ&quot;ר. גלובס נכסים, מומחים בנדל&quot;ן נווה צדק.">
+  <meta name="keywords" content="דירות למכירה נווה צדק, דירות להשכרה נווה צדק, נדל&quot;ן נווה צדק, תיווך נווה צדק תל אביב">
+  <meta name="geo.region" content="IL-TA" /><meta name="geo.placename" content="נווה צדק, תל אביב" /><meta name="geo.position" content="32.0578;34.7627" /><meta name="ICBM" content="32.0578, 34.7627" />
+  <meta property="og:title" content="דירות למכירה ולהשכרה בנווה צדק | גלובס נכסים" /><meta property="og:description" content="נכסי יוקרה בנווה צדק — ₪89K למ&quot;ר, מהשכונות היוקרתיות בישראל." /><meta property="og:type" content="website" /><meta property="og:url" content="https://globesrealestate.co.il/neve-tzedek.html" /><meta property="og:locale" content="he_IL" />
+  <link rel="canonical" href="https://globesrealestate.co.il/neve-tzedek.html" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"גלובס נכסים","item":"https://globesrealestate.co.il/"},{"@type":"ListItem","position":2,"name":"תל אביב","item":"https://globesrealestate.co.il/"},{"@type":"ListItem","position":3,"name":"נווה צדק","item":"https://globesrealestate.co.il/neve-tzedek.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":["RealEstateAgent","LocalBusiness"],"@id":"https://globesrealestate.co.il/#business","name":"גלובס נכסים","url":"https://globesrealestate.co.il/","telephone":"+972-52-123-4567","address":{"@type":"PostalAddress","streetAddress":"דיזנגוף 50","addressLocality":"תל אביב","postalCode":"6433222","addressCountry":"IL"},"areaServed":[{"@type":"Neighborhood","name":"נווה צדק"}],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"127","bestRating":"5"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"כמה עולה דירה בנווה צדק?","acceptedAnswer":{"@type":"Answer","text":"המחיר הממוצע למ\"ר בנווה צדק עומד על כ-89,000 ₪. דירת 3-4 חדרים עולה בממוצע 6-10 מיליון ₪."}},{"@type":"Question","name":"כמה עולה שכירות בנווה צדק?","acceptedAnswer":{"@type":"Answer","text":"שכירות ממוצעת לדירת 3 חדרים בנווה צדק עומדת על כ-12,000-16,000 ₪ לחודש."}},{"@type":"Question","name":"מה מייחד את נווה צדק?","acceptedAnswer":{"@type":"Answer","text":"נווה צדק (1887) היא השכונה הוותיקה ביותר בתל אביב, עם בניינים שמורים, תקרות גבוהות וקרבה לים."}}]}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=44" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    :root { --accent:#F5B731; --accent-dark:#c9960a; --accent-light:#fef9e7; }
+    /* ── Neve Tzedek: Obsidian & Gold ── */
+    :root { --hood-dark:#0c0900; --hood-glow:#F5B731; }
+    .hero-bg { background: linear-gradient(135deg, #0c0900 0%, #1a1200 45%, #261a00 70%, #0c0900 100%); }
+    .shape-1 { background: #F5B731; opacity:.22; }
+    .shape-2 { background: #c9960a; opacity:.12; }
+    .shape-3 { background: #F5B731; opacity:.20; }
+    /* hood shared */
+    .section-tag { background:var(--accent-light); color:var(--accent-dark); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+    @media(max-width:768px){ .about-grid{grid-template-columns:1fr;} }
+    .highlights-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px; }
+    .highlight-card { background:var(--accent-light); border-radius:12px; padding:14px 16px; border-right:4px solid var(--accent); }
+    .highlight-card strong { color:var(--accent-dark); display:block; font-size:.9rem; margin-bottom:3px; }
+    .highlight-card p { font-size:.82rem; color:#64748b; margin:0; }
+    details { background:#f8fafc; border-radius:12px; padding:20px; border:1px solid #e2e8f0; }
+    details summary { font-weight:700; cursor:pointer; font-size:.95rem; list-style:none; }
+    details summary::-webkit-details-marker { display:none; }
+    details summary::before { content:'＋ '; color:var(--accent); font-weight:900; }
+    details[open] summary::before { content:'－ '; }
+    details p { margin-top:12px; color:#475569; line-height:1.75; font-size:.95rem; }
+    #hoodMap { height:340px; }
+    .hood-breadcrumb { font-size:.82rem; color:rgba(255,255,255,.5); margin-bottom:20px; }
+    .hood-breadcrumb a { color:rgba(255,255,255,.5); text-decoration:none; }
+    .hood-breadcrumb a:hover { color:var(--gold,#F5B731); }
+    .hood-breadcrumb span { margin:0 6px; }
+    .hero-cta { display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:8px; }
+    .btn-outline-white { display:inline-flex; align-items:center; gap:8px; background:transparent; color:#fff; border:2px solid rgba(255,255,255,.4); font-family:'Heebo',sans-serif; font-size:.95rem; font-weight:700; padding:12px 28px; border-radius:50px; cursor:pointer; transition:all .25s; text-decoration:none; }
+    .btn-outline-white:hover { border-color:#fff; background:rgba(255,255,255,.1); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <img src="logo.png" class="logo-img" alt="גלובס נכסים" style="width:52px;height:auto;border-radius:12px;">
+      <div class="logo-text"><span class="logo-main">גלובס נכסים</span><span class="logo-sub">מומחים בנדל"ן</span></div>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#properties">נכסים</a><a href="index.html#about">אודות</a><a href="index.html#services">שירותים</a><a href="index.html#agents">סוכנים</a><a href="#contact">צור קשר</a>
+    </nav>
+    <div class="nav-right" style="display:flex;align-items:center;gap:12px;">
+      <div id="google_translate_element" style="position:absolute;opacity:0;z-index:-1;pointer-events:none;" translate="no"></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="תפריט ניווט" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="nav-actions">
+        <a href="tel:0521234567" class="btn-phone" translate="no">052-123-4567</a>
+        <button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">פרסם נכס</button>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#properties" onclick="toggleMenu()">נכסים</a><a href="index.html#about" onclick="toggleMenu()">אודות</a><a href="index.html#services" onclick="toggleMenu()">שירותים</a><a href="index.html#agents" onclick="toggleMenu()">סוכנים</a><a href="#contact" onclick="toggleMenu()">צור קשר</a>
+    <div style="padding:8px 16px 16px;display:flex;justify-content:center;border-top:1px solid #f1f5f9;">
+      <a href="tel:0521234567" class="mobile-phone" translate="no"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>052-123-4567</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-overlay"></div>
+    <div class="hero-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+  </div>
+  <div class="hero-en-inline">NEVE TZEDEK</div>
+  <div class="container hero-content">
+    <nav class="hood-breadcrumb" aria-label="ניווט מיקום">
+      <a href="index.html">גלובס נכסים</a><span>›</span><a href="index.html">תל אביב</a><span>›</span><span>נווה צדק</span>
+    </nav>
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      ⭐ יוקרה · נווה צדק · תל אביב
+    </div>
+    <h1 class="hero-title">
+      דירות למכירה<br/>
+      <span class="gradient-text">ולהשכרה בנווה צדק</span>
+    </h1>
+    <p class="hero-subtitle">השכונה היוקרתית ביותר בתל אביב — ₪89,000 למ"ר בממוצע, בניינים היסטוריים שמורים, תקרות גבוהות וקרבה לים. 349 נכסים זמינים.</p>
+    <div class="hero-cta">
+      <a href="#properties" class="btn-primary large">צפה בנכסים</a>
+    </div>
+  </div>
+  <!-- Scroll hint arrow -->
+  <a href="#properties" class="hero-scroll-hint">
+    <span>גלול למטה</span>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m19 9-7 7-7-7"/></svg>
+  </a>
+  <div class="hero-stats">
+    <div class="container hero-stats-inner">
+      <div class="stat-item">
+        <span class="stat-num">₪89K</span>
+        <span class="stat-label">ממוצע למ"ר</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">מ-₪5.2M</span>
+        <span class="stat-label">דירות למכירה</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">מ-₪12K</span>
+        <span class="stat-label">שכירות/חודש</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">#1</span>
+        <span class="stat-label">יוקרה בתל אביב</span>
+      </div>
+    </div>
+  </div>
+  <!-- Wave overlay INSIDE hero — keeps gradient continuous, no seam -->
+  <svg class="hero-wave-bottom" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f8fafc"/>
+  </svg>
+</section>
+
+<!-- PROPERTIES -->
+<section class="section" id="properties">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">נכסים בנווה צדק</div>
+      <h2 class="section-title">נכסים זמינים <span class="accent">עכשיו</span></h2>
+      <p class="section-desc">נכסי יוקרה למכירה ולהשכרה בלב נווה צדק</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group-main">
+        <button class="filter-btn active" onclick="filterProps(this,'all')">הכל</button>
+        <button class="filter-btn" onclick="filterProps(this,'sale')">🏠 למכירה</button>
+        <button class="filter-btn" onclick="filterProps(this,'rent')">🔑 להשכרה</button>
+      </div>
+    </div>
+
+    <div class="properties-grid" id="propertiesGrid">
+
+      <!-- SALE 1 -->
+      <div class="prop-card" data-type="sale" data-location="תל אביב, נווה צדק">
+        <div class="prop-img" style="background:linear-gradient(135deg,#1a0e00,#c9a84c)">
+          <div class="prop-badge sale">למכירה</div>
+          <div class="prop-overlay"><button class="btn-fav">♡</button></div>
+          <div class="prop-icon-big">🏠</div>
+          <div class="available-dot" title="זמין"></div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">₪ 8,500,000</div>
+          <h3 class="prop-name">דירת מעצב שופצה בנווה צדק</h3>
+          <div class="prop-loc"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> נווה צדק, תל אביב</div>
+          <div class="prop-features"><span>🛏 4 חדרים</span><span>🚿 2 אמבטיות</span><span>📐 120 מ"ר</span><span>🌿 חצר פרטית</span></div>
+          <p style="font-size:.85rem;color:#64748b;padding:0 16px 8px;line-height:1.6;">דירה מעוצבת ע"י אדריכל בלב נווה צדק. תקרות 3.2 מ', ריצוף טראצו מקורי, מטבח אי אירופאי. שיפוץ יסודי 2024.</p>
+          <div class="prop-footer">
+            <div class="agent-mini"><div class="agent-avatar" style="background:#c9a84c">ד</div><span>דנה כהן</span></div>
+            <div class="prop-actions">
+              <a href="https://wa.me/972548026123?text=שלום%2C+אני+מעוניין+בדירה+מעצב+נווה+צדק+₪8.5M" class="btn-whatsapp" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>וואטסאפ</a>
+              <a href="#contact" class="btn-details">פרטים</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SALE 2 -->
+      <div class="prop-card" data-type="sale" data-location="תל אביב, נווה צדק">
+        <div class="prop-img" style="background:linear-gradient(135deg,#2d1b00,#8a6a20)">
+          <div class="prop-badge sale">למכירה</div>
+          <div class="prop-overlay"><button class="btn-fav">♡</button></div>
+          <div class="prop-icon-big">🏠</div>
+          <div class="available-dot" title="זמין"></div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">₪ 5,200,000</div>
+          <h3 class="prop-name">דירה בבניין בוטיק שמור</h3>
+          <div class="prop-loc"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> נווה צדק, תל אביב</div>
+          <div class="prop-features"><span>🛏 3 חדרים</span><span>🚿 1 אמבטיה</span><span>📐 88 מ"ר</span><span>🏛️ בניין שמור</span></div>
+          <p style="font-size:.85rem;color:#64748b;padding:0 16px 8px;line-height:1.6;">דירה בבניין עתיק שמור, תקרות גבוהות, קשתות אבן, גינת שיתוף. מרחק 200 מ' מהים. נדיר.</p>
+          <div class="prop-footer">
+            <div class="agent-mini"><div class="agent-avatar" style="background:#8a6a20">ד</div><span>דנה כהן</span></div>
+            <div class="prop-actions">
+              <a href="https://wa.me/972548026123?text=שלום%2C+אני+מעוניין+בדירה+בוטיק+נווה+צדק+₪5.2M" class="btn-whatsapp" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>וואטסאפ</a>
+              <a href="#contact" class="btn-details">פרטים</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RENT 1 -->
+      <div class="prop-card" data-type="rent" data-location="תל אביב, נווה צדק">
+        <div class="prop-img" style="background:linear-gradient(135deg,#0c4a6e,#0ea5e9)">
+          <div class="prop-badge rent">להשכרה</div>
+          <div class="prop-overlay"><button class="btn-fav">♡</button></div>
+          <div class="prop-icon-big">🔑</div>
+          <div class="available-dot" title="זמין"></div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">₪ 15,000 <span style="font-size:.75rem;font-weight:400;color:#94a3b8">/חודש</span></div>
+          <h3 class="prop-name">דירת יוקרה להשכרה — נווה צדק</h3>
+          <div class="prop-loc"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> נווה צדק, תל אביב</div>
+          <div class="prop-features"><span>🛏 4 חדרים</span><span>🚿 2 אמבטיות</span><span>📐 130 מ"ר</span><span>🌿 גינה</span></div>
+          <p style="font-size:.85rem;color:#64748b;padding:0 16px 8px;line-height:1.6;">דירה מרהיבה מרוהטת חלקית, חצר פרטית, מיזוג מרכזי, חניה. גישה מיידית. כולל ועד בית.</p>
+          <div class="prop-footer">
+            <div class="agent-mini"><div class="agent-avatar" style="background:#0ea5e9">ד</div><span>דנה כהן</span></div>
+            <div class="prop-actions">
+              <a href="https://wa.me/972548026123?text=שלום%2C+אני+מעוניין+בהשכרה+נווה+צדק+₪15,000" class="btn-whatsapp" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>וואטסאפ</a>
+              <a href="#contact" class="btn-details">פרטים</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RENT 2 -->
+      <div class="prop-card" data-type="rent" data-location="תל אביב, נווה צדק">
+        <div class="prop-img" style="background:linear-gradient(135deg,#1e1b4b,#4f46e5)">
+          <div class="prop-badge rent">להשכרה</div>
+          <div class="prop-overlay"><button class="btn-fav">♡</button></div>
+          <div class="prop-icon-big">🔑</div>
+          <div class="available-dot" title="זמין"></div>
+        </div>
+        <div class="prop-body">
+          <div class="prop-price">₪ 12,500 <span style="font-size:.75rem;font-weight:400;color:#94a3b8">/חודש</span></div>
+          <h3 class="prop-name">דירת 3 חדרים — סמטת נווה צדק</h3>
+          <div class="prop-loc"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> נווה צדק, תל אביב</div>
+          <div class="prop-features"><span>🛏 3 חדרים</span><span>🚿 1 אמבטיה</span><span>📐 92 מ"ר</span><span>🏛️ תקרות 3מ'</span></div>
+          <p style="font-size:.85rem;color:#64748b;padding:0 16px 8px;line-height:1.6;">דירה בבניין עתיק שמור, תקרות גבוהות 3 מ', קשתות, אבן. שלווה וצנעה בלב השכונה הקסומה.</p>
+          <div class="prop-footer">
+            <div class="agent-mini"><div class="agent-avatar" style="background:#4f46e5">י</div><span>יוסי ישראל</span></div>
+            <div class="prop-actions">
+              <a href="https://wa.me/972548026123?text=שלום%2C+אני+מעוניין+בהשכרה+3+חד+נווה+צדק+₪12,500" class="btn-whatsapp" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>וואטסאפ</a>
+              <a href="#contact" class="btn-details">פרטים</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="center-btn">
+      <a href="#contact" class="btn-outline-primary" style="text-decoration:none">ראה עוד נכסים — שלח פנייה</a>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider" style="background:var(--light)">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px">
+    <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f8fafc"/>
+  </svg>
+</div>
+
+<!-- ABOUT + MAP -->
+<section class="section section-light">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="section-tag">על השכונה</div>
+        <h2 class="section-title">נווה צדק — <span class="accent">הגביע של תל אביב</span></h2>
+        <p style="color:#475569;line-height:1.8;margin-bottom:16px;">נווה צדק (1887) היא השכונה העברית הראשונה שנבנתה מחוץ ליפו. עם מחיר ממוצע של <strong>₪89,000 למ"ר</strong>, היא הכי יקרה בתל אביב ובין הראשונות בישראל.</p>
+        <p style="color:#475569;line-height:1.8;margin-bottom:24px;">בניינים עתיקים שמורים, תקרות 3+ מ', חצרות פנימיות, קרבה לסוזן דלל, לים ולנמל — נווה צדק היא נכס בפני עצמה.</p>
+        <div class="highlights-grid">
+          <div class="highlight-card"><strong>₪89K/מ"ר</strong><p>המחיר הגבוה ביותר בתל אביב</p></div>
+          <div class="highlight-card"><strong>🌊 200מ' לים</strong><p>מרחק הליכה לחוף הים</p></div>
+          <div class="highlight-card"><strong>🏛️ 1887</strong><p>שכונה מוכרזת לשימור</p></div>
+          <div class="highlight-card"><strong>📈 השקעה</strong><p>ביקוש עקבי לאורך שנים</p></div>
+        </div>
+      </div>
+      <div class="map-wrapper">
+        <div id="hoodMap"></div>
+        <div id="hoodMapCount" style="text-align:center;font-size:.82rem;color:#64748b;margin-top:8px;font-weight:600;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider" style="background:var(--white)">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="height:60px">
+    <path d="M0,20 C480,60 960,0 1440,30 L1440,0 L0,0 Z" fill="#f8fafc"/>
+  </svg>
+</div>
+
+<!-- ========== NEIGHBORHOOD PHOTO ========== -->
+<section class="hood-gallery-section">
+  <img src="assets/neighborhoods/neve-tzedek.jpg" alt="📍 נווה צדק" loading="lazy">
+  <div class="hood-gallery-overlay">
+    <div class="hood-gallery-badge">📍 נווה צדק</div>
+    <h3 class="hood-gallery-title">השכונה העברית הראשונה (1887)</h3>
+    <p class="hood-gallery-sub">₪89,000 למ"ר · נכס ברחוב שבזי נמכר ב-100 מיליון ₪</p>
+    <a href="#contact" class="btn-primary">אני מעוניין בנכס בנווה צדק</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container" style="max-width:800px;">
+    <div class="section-header">
+      <div class="section-tag">שאלות נפוצות</div>
+      <h2 class="section-title">כל מה שרציתם לדעת <span class="accent">על נווה צדק</span></h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <details><summary>כמה עולה דירה בנווה צדק?</summary><p>המחיר הממוצע למ"ר בנווה צדק עומד על כ-89,000 ₪ — הגבוה ביותר בתל אביב. דירת 3-4 חדרים עולה בממוצע 6-10 מיליון ₪, ודירות גדולות ופנטהאוזים מגיעות ל-15-20 מיליון ₪ ומעלה. מקור: מדלן 2025.</p></details>
+      <details><summary>כמה עולה שכירות בנווה צדק?</summary><p>שכירות ממוצעת לדירת 3 חדרים בנווה צדק עומדת על כ-12,000-16,000 ₪ לחודש. דירות יוקרה ומרוהטות מגיעות ל-20,000-25,000 ₪ לחודש ומעלה.</p></details>
+      <details><summary>מה מייחד את נווה צדק?</summary><p>נווה צדק (1887) היא השכונה הוותיקה ביותר בתל אביב, עם בניינים שמורים, תקרות גבוהות, חצרות פנימיות וקרבה לים ולנמל. נחשבת לאחת השכונות היוקרתיות ביותר בישראל.</p></details>
+      <details><summary>האם כדאי להשקיע בנווה צדק?</summary><p>נווה צדק מהווה אחת ההשקעות הנדל"ניות הבטוחות ביותר בישראל, עם ביקוש עקבי משוק מקומי ובינלאומי. היצע הנכסים מוגבל בגלל שמירת המורשת, מה שמבטיח שמירת ערך לאורך זמן.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT — rendered by components.js -->
+<section class="section section-dark" id="contact">
+  <div class="container" style="max-width:680px;" id="contact-root"></div>
+</section>
+
+<!-- ========== PROPERTY MODAL ========== -->
+<div class="prop-modal-overlay" id="propModalOverlay" onclick="closeModal(event)">
+  <div class="prop-modal" id="propModal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="modal-gallery" id="modalGallery">
+      <div class="gallery-main" id="galleryMain"></div>
+      <div class="gallery-thumbs" id="galleryThumbs"></div>
+      <div class="gallery-badge" id="galleryBadge"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-left">
+        <div class="modal-price" id="modalPrice"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <div class="modal-location" id="modalLocation"></div>
+        <div class="modal-features" id="modalFeatures"></div>
+        <div class="modal-desc" id="modalDesc"></div>
+        <div class="modal-agent" id="modalAgent"></div>
+        <div class="modal-nav-btns">
+          <a class="btn-whatsapp-modal" id="modalWA" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg> שלח וואטסאפ</a>
+          <a class="btn-waze" id="modalWaze" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M20.54 6.63C19.84 4.05 17.47 2 14.63 2H9.37C6.53 2 4.16 4.05 3.46 6.63L2 12l1.46 5.37C4.16 19.95 6.53 22 9.37 22h5.26c2.84 0 5.21-2.05 5.91-4.63L22 12l-1.46-5.37zM8 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm4 3c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm4-3a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg> נווט בוויז</a>
+        </div>
+      </div>
+      <div class="modal-right">
+        <div class="modal-form-wrap">
+          <h3 class="modal-form-title"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.42 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.5 16z"/></svg> צור קשר על נכס זה</h3>
+          <p class="modal-form-sub" id="modalFormSub"></p>
+          <form onsubmit="submitModalForm(event)">
+            <div class="mform-group"><input type="text" placeholder="שם מלא *" required /></div>
+            <div class="mform-group"><input type="tel" placeholder="טלפון *" required /></div>
+            <div class="mform-group"><input type="email" placeholder="אימייל" /></div>
+            <div class="mform-group"><select><option>מעוניין לשמוע פרטים</option><option>רוצה לקבוע ביקור</option><option>שאלה על הנכס</option><option>הצעת מחיר</option></select></div>
+            <div class="mform-group"><textarea rows="3" placeholder="הודעה נוספת..."></textarea></div>
+            <div class="mform-group form-consent">
+              <label class="consent-label"><input type="checkbox" name="marketingConsent" /><span>אני מסכים/ה לקבל עדכוני נכסים והצעות מגלובס נכסים.</span></label>
+              <p class="consent-note">בלחיצה על שליחה אתה מאשר/ת את <a href="privacy.html" target="_blank">מדיניות הפרטיות</a>.</p>
+            </div>
+            <button type="submit" class="btn-primary full modal-submit"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> שלח פנייה על הנכס</button>
+          </form>
+          <div class="modal-phone-row"><span>או התקשר ישירות:</span><a class="modal-phone-link" id="modalPhone" href="tel:0548026123" translate="no">054-802-6123</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand"><div class="logo"><img src="logo.png" class="logo-img small" alt="גלובס נכסים"><div class="logo-text"><span class="logo-main">גלובס נכסים</span><span class="logo-sub">מומחים בנדל"ן</span></div></div><p class="footer-tagline">מאז 2004 — בונים חלומות, מוכרים בתים.</p></div>
+    <div class="footer-links">
+      <div class="footer-col"><h4>שכונות</h4><a href="neve-tzedek.html">נווה צדק</a><a href="florentin.html">פלורנטין</a><a href="north-tel-aviv.html">הצפון הישן</a><a href="kerem-hateimanim.html">כרם התימנים</a><a href="bat-yam.html">בת ים</a></div>
+      <div class="footer-col"><h4>שירותים</h4><a href="index.html#services">הערכת שווי חינם</a><a href="index.html#services">שיווק נכסים</a><a href="index.html#services">ייעוץ השקעות</a><a href="index.html#services">נדל"ן יוקרה</a></div>
+      <div class="footer-col"><h4>ניווט</h4><a href="index.html">עמוד הבית</a><a href="index.html#about">אודות</a><a href="index.html#agents">הסוכנים שלנו</a><a href="#contact">צור קשר</a></div>
+      <div class="footer-col"><h4>יצירת קשר</h4><a href="tel:0521234567" translate="no">052-123-4567</a><a href="mailto:info@globesrealestate.co.il">info@globesrealestate.co.il</a><span>דיזנגוף 50, תל אביב</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom"><div class="container footer-bottom-inner"><span>© 2024 גלובס נכסים. כל הזכויות שמורות.</span><div class="footer-legal"><a href="privacy.html">מדיניות פרטיות</a><a href="#">תנאי שימוש</a><a href="accessibility.html">נגישות</a></div></div></div>
+</footer>
+
+<!-- Accessibility Widget -->
+<div class="a11y-widget" id="a11yWidget" role="region" aria-label="תפריט נגישות">
+  <button class="a11y-toggle" id="a11yToggle" title="נגישות" aria-label="פתיחת תפריט נגישות" aria-expanded="false" aria-controls="a11yMenu" aria-haspopup="menu"><span aria-hidden="true">♿</span></button>
+  <div class="a11y-menu" id="a11yMenu" role="menu" aria-hidden="true">
+    <div class="a11y-menu-header">כלי נגישות</div>
+    <div class="a11y-section-label">תצוגה</div>
+    <button class="a11y-btn" role="menuitem" aria-pressed="false" data-a11y="highContrast">ניגודיות גבוהה</button>
+    <button class="a11y-btn" role="menuitem" aria-pressed="false" data-a11y="invertContrast">ניגודיות הפוכה</button>
+    <button class="a11y-btn" role="menuitem" aria-pressed="false" data-a11y="grayscale">גווני אפור</button>
+    <div class="a11y-section-label">טקסט</div>
+    <div class="a11y-font-row"><button class="a11y-btn a11y-font-btn" id="a11yFontMinus" role="menuitem" aria-label="הקטן טקסט">א-</button><span class="a11y-font-label" id="a11yFontLabel" aria-live="polite">100%</span><button class="a11y-btn a11y-font-btn" id="a11yFontPlus" role="menuitem" aria-label="הגדל טקסט">א+</button></div>
+    <button class="a11y-btn" role="menuitem" aria-pressed="false" data-a11y="readableFont">פונט קריא</button>
+    <div class="a11y-section-label">ניווט</div>
+    <button class="a11y-btn" role="menuitem" aria-pressed="false" data-a11y="underlineLinks">הדגשת קישורים</button>
+    <button class="a11y-btn" role="menuitem" aria-pressed="false" data-a11y="bigCursor">סמן גדול</button>
+    <button class="a11y-btn" role="menuitem" aria-pressed="false" data-a11y="stopAnimations">עצירת אנימציות</button>
+    <div class="a11y-divider" aria-hidden="true"></div>
+    <button class="a11y-btn a11y-reset-btn" id="a11yReset" role="menuitem">↺ איפוס הכל</button>
+    <a class="a11y-btn a11y-statement-btn" href="accessibility.html" role="menuitem">הצהרת נגישות ↗</a>
+  </div>
+</div>
+<div class="toast" id="toast"><div class="toast-icon">✅</div><div><strong>הפנייה נשלחה!</strong><p>ניצור קשר תוך שעה</p></div></div>
+<div class="lang-panel-wrapper" translate="no"><div class="lang-side-panel"><div class="lang-items"><button onclick="changeWebsiteLanguage('iw')" title="עברית">HE</button><button onclick="changeWebsiteLanguage('en')" title="English">EN</button><button onclick="changeWebsiteLanguage('fr')" title="Français">FR</button><button onclick="changeWebsiteLanguage('de')" title="Deutsch">DE</button><button onclick="changeWebsiteLanguage('es')" title="Español">ES</button><button onclick="changeWebsiteLanguage('ar')" title="العربية">AR</button></div></div><button class="lang-collapse-btn" onclick="toggleLangPanel()" aria-label="פאנל שפות">›</button></div>
+<a href="https://wa.me/972548026123?text=שלום%2C+אני+מעוניין+בנכס+בנווה+צדק" class="float-wa" target="_blank" rel="noopener" aria-label="WhatsApp"><span class="float-wa-tooltip" translate="no">דברו איתנו עכשיו</span><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></a>
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script src="components.js?v=1"></script>
+<script src="hood-map.js?v=1"></script>
+<script src="app.js?v=3"></script>
+<script>
+function filterProps(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#propertiesGrid .prop-card').forEach(card => {
+    card.style.display = (type === 'all' || card.dataset.type === type) ? '' : 'none';
+  });
+}
+(function() {
+  var _orig = window.initMap;
+  window.initMap = function(props) {
+    return _orig(props.filter(function(p) {
+      return p.location && p.location.includes('נווה צדק');
+    }));
+  };
+})();
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof initHoodMap === 'function') {
+    initHoodMap({ neighborhood: 'נווה צדק', city: 'תל אביב', center: [32.0578, 34.7627], zoom: 14 });
+  }
+  GlobesComponents.renderContact('contact-root', {
+    neighborhood: 'נווה צדק',
+    subjects: ['קנייה בנווה צדק','השכרה בנווה צדק','הערכת שווי','השקעה','אחר'],
+    placeholder: 'מחפש נכס בנווה צדק — תקציב, חדרים, למכירה / להשכרה...'
+  });
+});
+</script>
+<script type="text/javascript">
+function googleTranslateElementInit(){const s=sessionStorage.getItem('globes_lang');if(!s||s==='iw'){const c=(p)=>{document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path='+p;document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path='+p+'; domain='+location.hostname;document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path='+p+'; domain=.'+location.hostname;};c('/');c(location.pathname);}new google.translate.TranslateElement({pageLanguage:'iw',includedLanguages:'en,fr,de,es,ar,iw',autoDisplay:false},'google_translate_element');}
+const RTL_LANGS=new Set(['iw','ar']);
+function applyLangLayout(l){const r=RTL_LANGS.has(l);document.documentElement.dir=r?'rtl':'ltr';document.documentElement.lang=l==='iw'?'he':l;document.documentElement.classList.toggle('site-ltr',!r);document.querySelectorAll('.lang-items button').forEach(b=>{b.classList.toggle('active',b.getAttribute('onclick').includes("'"+l+"'"));});}
+function toggleLangPanel(){const p=document.querySelector('.lang-side-panel'),b=document.querySelector('.lang-collapse-btn'),c=p.classList.toggle('collapsed');if(b)b.textContent=c?'‹':'›';sessionStorage.setItem('globes_lang_panel_collapsed',c?'1':'0');}
+function changeWebsiteLanguage(l){if(!l)return;sessionStorage.setItem('globes_lang',l);applyLangLayout(l);if(l==='iw'){const c=(p)=>{document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path='+p;document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path='+p+'; domain='+location.hostname;document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path='+p+'; domain=.'+location.hostname;};c('/');c(location.pathname);location.reload();return;}const t=(a)=>{const combo=document.querySelector('.goog-te-combo');if(!combo){if(a>0)setTimeout(()=>t(a-1),300);return;}combo.value=l;combo.dispatchEvent(new Event('change'));setTimeout(()=>applyLangLayout(l),500);};t(10);}
+(function(){const s=sessionStorage.getItem('globes_lang');if(s)applyLangLayout(s);const pc=sessionStorage.getItem('globes_lang_panel_collapsed');if(pc==='1'){const p=document.querySelector('.lang-side-panel'),b=document.querySelector('.lang-collapse-btn');if(p)p.classList.add('collapsed');if(b)b.textContent='‹';}if(!s||s==='iw'){document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain='+location.hostname;document.cookie='googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.'+location.hostname;return;}const fb=setTimeout(()=>{clearInterval(iv);sessionStorage.setItem('globes_lang','iw');applyLangLayout('iw');},3000);const iv=setInterval(()=>{const combo=document.querySelector('.goog-te-combo');if(combo){clearInterval(iv);clearTimeout(fb);combo.value=s;combo.dispatchEvent(new Event('change'));setTimeout(()=>applyLangLayout(s),400);}},300);})();
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

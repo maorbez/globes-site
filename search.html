@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>חיפוש נכסים | גלובס נכסים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:      #1565C0;
+      --blue-mid:  #1976D2;
+      --gold:      #F5B731;
+      --gold-dark: #f0a500;
+      --dark:      #0a0f1e;
+      --text:      #1a1a2e;
+      --text-muted:#64748b;
+      --light:     #f8fafc;
+      --white:     #ffffff;
+      --radius:    14px;
+      --shadow:    0 4px 24px rgba(0,0,0,.08);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,.15);
+      --green:     #22c55e;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      color: var(--text);
+      background: #f0f4f8;
+      direction: rtl;
+      min-height: 100vh;
+    }
+
+    /* ---- TOPBAR ---- */
+    .topbar {
+      background: linear-gradient(135deg, var(--dark) 0%, #1a2744 100%);
+      padding: 14px 0;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,.3);
+    }
+    .topbar-inner {
+      max-width: 1300px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .back-home {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: rgba(255,255,255,.7); text-decoration: none;
+      font-size: .85rem; font-weight: 500;
+      padding: 6px 14px; border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.15);
+      transition: all .2s;
+    }
+    .back-home:hover { color: var(--white); border-color: rgba(255,255,255,.4); }
+    .topbar-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .topbar-logo svg { width: 38px; height: 38px; filter: drop-shadow(0 0 6px rgba(245,183,49,.5)); }
+    .topbar-logo-text .tl-main { display: block; color: var(--white); font-size: .95rem; font-weight: 800; }
+    .topbar-logo-text .tl-sub  { display: block; color: rgba(255,255,255,.5); font-size: .7rem; }
+    .topbar-title {
+      flex: 1; text-align: center;
+      color: var(--white); font-size: 1.05rem; font-weight: 700;
+    }
+    .topbar-count {
+      background: rgba(245,183,49,.15); color: var(--gold);
+      font-size: .82rem; font-weight: 700;
+      padding: 5px 14px; border-radius: 50px;
+      border: 1px solid rgba(245,183,49,.3);
+      white-space: nowrap;
+    }
+    #resultCount { font-weight: 900; }
+
+    /* ---- LAYOUT ---- */
+    .page-layout {
+      max-width: 1300px; margin: 0 auto; padding: 28px 24px;
+      display: grid; grid-template-columns: 300px 1fr; gap: 24px;
+      align-items: start;
+    }
+
+    /* ---- FILTER PANEL ---- */
+    .filter-panel {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 24px;
+      position: sticky; top: 76px;
+    }
+    .panel-title {
+      font-size: 1rem; font-weight: 800; margin-bottom: 20px;
+      padding-bottom: 14px; border-bottom: 2px solid #f1f5f9;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-title svg { color: var(--blue); }
+
+    .filter-group { margin-bottom: 22px; }
+    .filter-label {
+      display: block; font-size: .8rem; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: .06em; margin-bottom: 10px;
+    }
+
+    /* Type toggle */
+    .type-toggle {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px; background: #f1f5f9; border-radius: 10px; padding: 4px;
+    }
+    .type-btn {
+      padding: 9px 4px; border: none; background: transparent;
+      font-family: 'Heebo', sans-serif; font-size: .85rem;
+      font-weight: 700; color: var(--text-muted);
+      border-radius: 8px; cursor: pointer;
+      transition: all .2s;
+    }
+    .type-btn.active {
+      background: #10b981;
+      color: var(--white);
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+    }
+
+    /* City multi-select pills */
+    .city-pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .city-pill {
+      padding: 6px 14px; border-radius: 50px; font-size: .82rem;
+      font-weight: 600; border: 1.5px solid #e2e8f0;
+      background: var(--white); color: var(--text-muted);
+      cursor: pointer; transition: all .2s;
+    }
+    .city-pill.active {
+      border-color: #10b981; background: #10b981;
+      color: var(--white);
+    }
+
+    /* Neighborhood checkboxes */
+    .hood-list {
+      max-height: 180px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 6px;
+      padding-right: 4px;
+    }
+    .hood-list::-webkit-scrollbar { width: 4px; }
+    .hood-list::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 2px; }
+    .hood-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+    .hood-cb {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .85rem; color: var(--text-muted); cursor: pointer;
+      padding: 4px 6px; border-radius: 6px; transition: background .15s;
+    }
+    .hood-cb:hover { background: #f8fafc; }
+    .hood-cb input[type=checkbox] {
+      width: 16px; height: 16px; accent-color: var(--blue); cursor: pointer;
+    }
+    .hood-cb.checked { color: var(--text); font-weight: 600; }
+
+    /* Price range */
+    .price-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .price-input-wrap label {
+      display: block; font-size: .72rem; color: var(--text-muted);
+      margin-bottom: 4px; font-weight: 600;
+    }
+    .price-input-wrap input {
+      width: 100%; padding: 9px 10px; border: 1.5px solid #e2e8f0;
+      border-radius: 8px; font-family: 'Heebo', sans-serif;
+      font-size: .88rem; color: var(--text);
+      transition: border-color .2s;
+    }
+    .price-input-wrap input:focus { outline: none; border-color: var(--blue); }
+
+    /* Option Fix */
+    select {
+      background-color: var(--white) !important;
+      color: var(--text) !important;
+    }
+    select option {
+      background-color: var(--white) !important;
+      color: var(--text) !important;
+    }
+
+    /* Rooms */
+    .rooms-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .room-pill {
+      width: 40px; height: 36px; border-radius: 8px; font-size: .9rem;
+      font-weight: 700; border: 1.5px solid #e2e8f0;
+      background: var(--white); color: var(--text-muted);
+      cursor: pointer; transition: all .2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .room-pill.active { border-color: #10b981; background: #10b981; color: #fff; }
+
+    .reset-filters {
+      width: 100%; padding: 11px; border: none;
+      background: #f8fafc; border-radius: 10px;
+      font-family: 'Heebo', sans-serif; font-size: .85rem;
+      font-weight: 700; color: var(--text-muted);
+      cursor: pointer; transition: all .2s; margin-top: 8px;
+    }
+    .reset-filters:hover { background: #fee2e2; color: #ef4444; }
+
+    /* ---- RESULTS ---- */
+    .results-area {}
+    .results-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px; flex-wrap: wrap; gap: 10px;
+    }
+    .results-label { font-weight: 700; font-size: .95rem; color: var(--text); }
+    .results-label span { color: var(--blue); }
+
+    .sort-select {
+      padding: 8px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px;
+      font-family: 'Heebo', sans-serif; font-size: .85rem; color: var(--text);
+      background: var(--white); cursor: pointer; transition: border .2s;
+    }
+    .sort-select:focus { outline: none; border-color: var(--blue); }
+
+    .results-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+    }
+
+    /* ---- RESULT CARD ---- */
+    .res-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: var(--shadow); overflow: hidden;
+      border: 1px solid #f1f5f9;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      cursor: pointer;
+      position: relative;
+    }
+    .res-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(21,101,192,.18);
+    }
+    .res-img {
+      height: 190px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .res-emoji { font-size: 4.5rem; opacity: .32; user-select: none; }
+    .res-badge {
+      position: absolute; top: 12px; right: 12px;
+      font-size: .68rem; font-weight: 700; letter-spacing: .06em;
+      padding: 4px 11px; border-radius: 50px; text-transform: uppercase;
+    }
+    .res-badge.sale { background: var(--gold); color: #1a1a1a; }
+    .res-badge.rent { background: #10b981; color: #fff; }
+    .res-badge.commercial-sale { background: #f97316; color: #fff; }
+    .res-badge.commercial-rent { background: #a855f7; color: #fff; }
+    .res-avail {
+      position: absolute; bottom: 10px; left: 10px;
+      width: 10px; height: 10px; background: var(--green);
+      border-radius: 50%; border: 2px solid rgba(255,255,255,.9);
+      animation: rPulse 2s ease-in-out infinite;
+    }
+    @keyframes rPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,.5); }
+      60%      { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+    }
+    .res-body { padding: 16px 18px; }
+    .res-price {
+      font-size: 1.35rem; font-weight: 900; color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .res-title { font-size: .95rem; font-weight: 700; margin-bottom: 6px; }
+    .res-loc {
+      display: flex; align-items: center; gap: 4px;
+      font-size: .78rem; color: var(--text-muted); margin-bottom: 12px;
+    }
+    .res-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .res-tag {
+      font-size: .72rem; background: #f8fafc; border: 1px solid #e2e8f0;
+      color: var(--text-muted); padding: 3px 9px; border-radius: 6px;
+      font-weight: 500;
+    }
+    .res-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px; border-top: 1px solid #f1f5f9; gap: 8px;
+    }
+    .res-agent { display: flex; align-items: center; gap: 7px; font-size: .8rem; color: var(--text-muted); }
+    .res-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      color: #fff; font-weight: 700; font-size: .75rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .res-actions { display: flex; gap: 6px; }
+    .res-wa {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: #25D366; color: #fff; text-decoration: none;
+      font-size: .75rem; font-weight: 700; padding: 6px 11px;
+      border-radius: 7px; transition: all .2s;
+    }
+    .res-wa:hover { background: #1da851; }
+    .res-detail {
+      display: inline-flex; align-items: center;
+      font-size: .75rem; font-weight: 700; color: var(--blue);
+      padding: 6px 11px; border: 1.5px solid var(--blue);
+      border-radius: 7px; transition: all .2s; text-decoration: none;
+    }
+    .res-detail:hover { background: var(--blue); color: #fff; }
+
+    /* Empty state */
+    .empty-state {
+      grid-column: 1/-1; text-align: center;
+      padding: 60px 20px; color: var(--text-muted);
+    }
+    .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+
+    /* Loading skeleton */
+    @keyframes skeletonShine {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% auto;
+      animation: skeletonShine 1.4s linear infinite;
+      border-radius: 8px;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 900px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .filter-panel { position: static; }
+      .results-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .topbar-title { display: none; }
+      .type-toggle { grid-template-columns: 1fr 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== TOPBAR ========== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="back-home">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+      בית
+    </a>
+    <a href="index.html" class="topbar-logo">
+      <img src="logo.png" alt="גלובס נכסים" style="width:40px; height:auto; border-radius:8px;">
+      <div class="topbar-logo-text">
+        <span class="tl-main">גלובס נכסים</span>
+        <span class="tl-sub">מומחים בנדל"ן</span>
+      </div>
+    </a>
+    <div class="topbar-title">חיפוש נכסים מתקדם</div>
+    <div class="topbar-count"><span id="resultCount">0</span> נכסים נמצאו</div>
+  </div>
+</header>
+
+<!-- ========== PAGE ========== -->
+<div class="page-layout">
+
+  <!-- ===== FILTER PANEL ===== -->
+  <aside class="filter-panel">
+    <div class="panel-title">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      סינון חיפוש
+    </div>
+
+    <!-- Type -->
+    <div class="filter-group">
+      <span class="filter-label">סוג עסקה</span>
+      <div class="type-toggle">
+        <button class="type-btn active" data-type="all" onclick="setType(this)">הכל</button>
+        <button class="type-btn" data-type="sale" onclick="setType(this)">למכירה</button>
+        <button class="type-btn" data-type="rent" onclick="setType(this)">להשכרה</button>
+      </div>
+    </div>
+
+    <!-- City -->
+    <div class="filter-group">
+      <span class="filter-label">עיר</span>
+      <div class="city-pills" id="cityPills"></div>
+    </div>
+
+    <!-- Neighborhood -->
+    <div class="filter-group" id="hoodGroup">
+      <span class="filter-label">שכונה</span>
+      <div class="hood-list" id="hoodList"></div>
+    </div>
+
+    <!-- Price -->
+    <div class="filter-group">
+      <span class="filter-label">תקציב (₪)</span>
+      <div class="price-inputs">
+        <div class="price-input-wrap">
+          <label>מינימום</label>
+          <input type="number" id="priceMin" placeholder="0" oninput="applyFilters()" />
+        </div>
+        <div class="price-input-wrap">
+          <label>מקסימום</label>
+          <input type="number" id="priceMax" placeholder="ללא הגבלה" oninput="applyFilters()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Rooms -->
+    <div class="filter-group">
+      <span class="filter-label">חדרים</span>
+      <div class="rooms-pills">
+        <button class="room-pill active" data-rooms="all" onclick="setRooms(this)">הכל</button>
+        <button class="room-pill" data-rooms="2" onclick="setRooms(this)">2</button>
+        <button class="room-pill" data-rooms="2.5" onclick="setRooms(this)">2.5</button>
+        <button class="room-pill" data-rooms="3" onclick="setRooms(this)">3</button>
+        <button class="room-pill" data-rooms="3.5" onclick="setRooms(this)">3.5</button>
+        <button class="room-pill" data-rooms="4" onclick="setRooms(this)">4</button>
+        <button class="room-pill" data-rooms="4.5" onclick="setRooms(this)">4.5</button>
+        <button class="room-pill" data-rooms="5" onclick="setRooms(this)">5+</button>
+      </div>
+    </div>
+
+    <button class="reset-filters" onclick="resetAll()">
+      ✕ נקה סינון
+    </button>
+  </aside>
+
+  <!-- ===== RESULTS ===== -->
+  <main class="results-area">
+    <div class="results-toolbar">
+      <div class="results-label">נמצאו <span id="countLabel">0</span> נכסים</div>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="default">מיון: רלוונטיות</option>
+        <option value="price-asc">מחיר: נמוך לגבוה</option>
+        <option value="price-desc">מחיר: גבוה לנמוך</option>
+        <option value="rooms-desc">חדרים: הכי הרבה</option>
+        <option value="sqm-desc">שטח: הכי גדול</option>
+      </select>
+    </div>
+    <div class="results-grid" id="resultsGrid">
+      <!-- Cards injected by JS -->
+    </div>
+  </main>
+
+</div>
+
+<script>
+// ============================================
+// SEARCH PAGE — Globes Nechasim
+// ============================================
+
+const WA = '972548026123';
+const DATA_VERSION = 'ta-batya-v1';
+
+const HARDCODED = [
+  { id:1,  type:'sale', price:'4,200,000', priceLabel:'₪ 4,200,000', title:'פנטהאוז עם נוף לים',           location:'תל אביב, הצפון הישן', lat:32.0973, lng:34.7712, rooms:5, baths:3, sqm:220, extra:'גג פרטי 80מ"ר',   emoji:'🏠', bg:'linear-gradient(135deg,#1a3a5c,#2d6a9f)', agent:{name:'דנה כהן',color:'#2d6a9f',init:'ד'}, active:true },
+  { id:2,  type:'sale', price:'3,500,000', priceLabel:'₪ 3,500,000', title:'דירת בוטיק בנווה צדק',         location:'תל אביב, נווה צדק',   lat:32.0578, lng:34.7627, rooms:4, baths:2, sqm:145, extra:'חצר פרטית',      emoji:'🏠', bg:'linear-gradient(135deg,#1b4332,#2d6a4f)', agent:{name:'דנה כהן',color:'#2d6a4f',init:'ד'}, active:true },
+  { id:3,  type:'sale', price:'2,800,000', priceLabel:'₪ 2,800,000', title:'דירה מודרנית בפלורנטין',       location:'תל אביב, פלורנטין',   lat:32.0569, lng:34.7640, rooms:3, baths:2, sqm:108, extra:'מרפסת',          emoji:'🏠', bg:'linear-gradient(135deg,#92400e,#d97706)', agent:{name:'יוסי ישראל',color:'#d97706',init:'י'}, active:true },
+  { id:4,  type:'sale', price:'3,100,000', priceLabel:'₪ 3,100,000', title:'דירת 4 חדרים בלב העיר',        location:'תל אביב, לב העיר',    lat:32.0800, lng:34.7800, rooms:4, baths:2, sqm:130, extra:'חניה + מחסן',    emoji:'🏠', bg:'linear-gradient(135deg,#312e81,#4f46e5)', agent:{name:'דנה כהן',color:'#4f46e5',init:'ד'}, active:true },
+  { id:5,  type:'sale', price:'5,500,000', priceLabel:'₪ 5,500,000', title:'וילה יוקרה ברמת אביב',         location:'תל אביב, רמת אביב',   lat:32.1120, lng:34.8020, rooms:6, baths:3, sqm:280, extra:'גינה + 3 חניות', emoji:'🏠', bg:'linear-gradient(135deg,#4a1942,#7b2d8b)', agent:{name:'משה לוי',color:'#7b2d8b',init:'מ'}, active:true },
+  { id:6,  type:'sale', price:'2,400,000', priceLabel:'₪ 2,400,000', title:'דירת שיקום בכרם התימנים',      location:'תל אביב, כרם התימנים',lat:32.0630, lng:34.7655, rooms:3, baths:1, sqm:95,  extra:'תקרות גבוהות',  emoji:'🏠', bg:'linear-gradient(135deg,#7c2d12,#c2410c)', agent:{name:'יוסי ישראל',color:'#c2410c',init:'י'}, active:true },
+  { id:7,  type:'sale', price:'1,850,000', priceLabel:'₪ 1,850,000', title:'דירת 4 חדרים בקוממיות',        location:'בת ים, קוממיות',      lat:32.0173, lng:34.7520, rooms:4, baths:2, sqm:115, extra:'נוף לים',        emoji:'🏠', bg:'linear-gradient(135deg,#164e63,#0e7490)', agent:{name:'שרה גולן',color:'#0e7490',init:'ש'}, active:true },
+  { id:8,  type:'sale', price:'2,200,000', priceLabel:'₪ 2,200,000', title:'דירת גן בגן רווה',              location:'בת ים, גן רווה',      lat:32.0230, lng:34.7450, rooms:5, baths:2, sqm:140, extra:'גינה 120מ"ר',   emoji:'🏠', bg:'linear-gradient(135deg,#1b4332,#2d6a4f)', agent:{name:'שרה גולן',color:'#2d6a4f',init:'ש'}, active:true },
+  { id:9,  type:'sale', price:'1,650,000', priceLabel:'₪ 1,650,000', title:'דירה משופצת ברמת יוסף',        location:'בת ים, רמת יוסף',     lat:32.0140, lng:34.7545, rooms:3, baths:1, sqm:85,  extra:'כניסה מיידית',  emoji:'🏠', bg:'linear-gradient(135deg,#065f46,#059669)', agent:{name:'משה לוי',color:'#059669',init:'מ'}, active:true },
+  { id:10, type:'sale', price:'1,900,000', priceLabel:'₪ 1,900,000', title:'דירת 4 חדרים, מרכז בת ים',     location:'בת ים, מרכז',         lat:32.0250, lng:34.7515, rooms:4, baths:1, sqm:105, extra:'מרפסת שמש',     emoji:'🏠', bg:'linear-gradient(135deg,#1565C0,#1976D2)', agent:{name:'שרה גולן',color:'#1976D2',init:'ש'}, active:true }
+];
+
+let allProps = [];
+let activeType = 'all';
+let activeCities = new Set();
+let activeHoods  = new Set();
+let activeRooms  = 'all';
+
+// ---- Load data ----
+async function loadData() {
+  const stored = localStorage.getItem('globes_properties');
+  if (stored) {
+    try {
+      const d = JSON.parse(stored);
+      if (Array.isArray(d) && d.length > 0) { allProps = d.filter(p => p.active !== false); return; }
+    } catch(e) {}
+  }
+  try {
+    const r = await fetch('properties.json');
+    if (r.ok) { const d = await r.json(); allProps = d.filter(p => p.active !== false); return; }
+  } catch(e) {}
+  allProps = HARDCODED.filter(p => p.active !== false);
+}
+
+// ---- Build city + hood pills from data ----
+function buildFilters() {
+  const cityMap = {};
+  allProps.forEach(p => {
+    const parts = p.location.split(',');
+    if (parts.length < 2) return;
+    const city = parts[0].trim(), hood = parts[1].trim();
+    if (!cityMap[city]) cityMap[city] = new Set();
+    cityMap[city].add(hood);
+  });
+
+  // Cities
+  const cp = document.getElementById('cityPills');
+  cp.innerHTML = '';
+  Object.keys(cityMap).forEach(city => {
+    const btn = document.createElement('button');
+    btn.className = 'city-pill';
+    btn.textContent = city;
+    btn.onclick = () => toggleCity(btn, city, cityMap);
+    cp.appendChild(btn);
+  });
+
+  // Hoods (initially all)
+  renderHoods(cityMap, null);
+  window._cityMap = cityMap;
+}
+
+function toggleCity(btn, city, cityMap) {
+  btn.classList.toggle('active');
+  if (btn.classList.contains('active')) activeCities.add(city);
+  else activeCities.delete(city);
+  activeHoods.clear();
+  const filtered = activeCities.size > 0
+    ? Object.fromEntries([...activeCities].map(c => [c, cityMap[c]]))
+    : cityMap;
+  renderHoods(filtered, null);
+  applyFilters();
+}
+
+function renderHoods(cityMap, preSelected) {
+  const hl = document.getElementById('hoodList');
+  hl.innerHTML = '';
+  activeHoods.clear();
+  Object.entries(cityMap).forEach(([city, hoods]) => {
+    if (Object.keys(cityMap).length > 1) {
+      const lbl = document.createElement('div');
+      lbl.style.cssText = 'font-size:.7rem;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;padding:6px 6px 2px;margin-top:4px;';
+      lbl.textContent = city;
+      hl.appendChild(lbl);
+    }
+    hoods.forEach(hood => {
+      const id = `hood_${hood}`;
+      const label = document.createElement('label');
+      label.className = 'hood-cb';
+      label.htmlFor = id;
+      label.innerHTML = `<input type="checkbox" id="${id}" value="${hood}" onchange="toggleHood(this,'${hood}')"/>${hood}`;
+      hl.appendChild(label);
+    });
+  });
+}
+
+function toggleHood(cb, hood) {
+  if (cb.checked) { activeHoods.add(hood); cb.closest('label').classList.add('checked'); }
+  else            { activeHoods.delete(hood); cb.closest('label').classList.remove('checked'); }
+  applyFilters();
+}
+
+function setType(btn) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeType = btn.dataset.type;
+  applyFilters();
+}
+
+function setRooms(btn) {
+  document.querySelectorAll('.room-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeRooms = btn.dataset.rooms;
+  applyFilters();
+}
+
+function resetAll() {
+  activeType = 'all'; activeCities.clear(); activeHoods.clear(); activeRooms = 'all';
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.type-btn[data-type="all"]').classList.add('active');
+  document.querySelectorAll('.city-pill').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.room-pill').forEach(b => b.classList.remove('active'));
+  document.querySelector('.room-pill[data-rooms="all"]').classList.add('active');
+  document.getElementById('priceMin').value = '';
+  document.getElementById('priceMax').value = '';
+  buildFilters();
+  applyFilters();
+}
+
+// ---- Filtering + sorting ----
+function applyFilters() {
+  const priceMin = parseInt(document.getElementById('priceMin').value.replace(/[^0-9]/g,'')) || 0;
+  const priceMax = parseInt(document.getElementById('priceMax').value.replace(/[^0-9]/g,'')) || Infinity;
+  const sort = document.getElementById('sortSelect').value;
+
+  let results = allProps.filter(p => {
+    const pNum = parseInt(p.price.replace(/[^0-9]/g,'')) || 0;
+    const parts = p.location.split(',');
+    const city = parts[0]?.trim() || '';
+    const hood = parts[1]?.trim() || '';
+
+    if (activeType !== 'all' && p.type !== activeType) return false;
+    if (activeCities.size > 0 && !activeCities.has(city)) return false;
+    if (activeHoods.size > 0 && !activeHoods.has(hood)) return false;
+    if (pNum < priceMin || pNum > priceMax) return false;
+    if (activeRooms !== 'all') {
+      const r = parseFloat(activeRooms);
+      if (activeRooms === '5') { if ((p.rooms || 0) < 5) return false; }
+      else if ((p.rooms || 0) !== r) return false;
+    }
+    return true;
+  });
+
+  // Sort
+  if (sort === 'price-asc')   results.sort((a,b) => numPrice(a) - numPrice(b));
+  if (sort === 'price-desc')  results.sort((a,b) => numPrice(b) - numPrice(a));
+  if (sort === 'rooms-desc')  results.sort((a,b) => (b.rooms||0) - (a.rooms||0));
+  if (sort === 'sqm-desc')    results.sort((a,b) => (b.sqm||0) - (a.sqm||0));
+
+  renderResults(results);
+}
+
+function numPrice(p) { return parseInt((p.price||'0').replace(/[^0-9]/g,'')) || 0; }
+
+// ---- Render ----
+function renderResults(props) {
+  const grid = document.getElementById('resultsGrid');
+  const count = props.length;
+  document.getElementById('resultCount').textContent = count;
+  document.getElementById('countLabel').textContent = count;
+
+  if (count === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>לא נמצאו נכסים</h3>
+        <p>נסה לשנות את פרמטרי הסינון</p>
+      </div>`;
+    return;
+  }
+
+  const typeLabel = {sale:'למכירה', rent:'להשכרה', 'commercial-sale':'מסחרי למכירה', 'commercial-rent':'מסחרי להשכרה'};
+  grid.innerHTML = props.map(p => {
+    const featLine = p.rooms
+      ? `<span class="res-tag">🛏 ${p.rooms} חד'</span><span class="res-tag">🚿 ${p.baths} אמב'</span><span class="res-tag">📐 ${p.sqm} מ"ר</span><span class="res-tag">✅ ${p.extra}</span>`
+      : `<span class="res-tag">📐 ${p.sqm} מ"ר</span><span class="res-tag">✅ ${p.extra}</span>`;
+    const ag = p.agent || {};
+    const waMsg = encodeURIComponent(`שלום, אני מעוניין בנכס: ${p.title} — ${p.location}`);
+    return `
+      <div class="res-card" onclick="openProp(${p.id})">
+        <div class="res-img" style="background:${p.bg}">
+          <div class="res-emoji">${p.emoji||'🏠'}</div>
+          <div class="res-badge ${p.type}">${typeLabel[p.type]||''}</div>
+          <div class="res-avail"></div>
+        </div>
+        <div class="res-body">
+          <div class="res-price">${p.priceLabel||('₪ '+p.price)}</div>
+          <div class="res-title">${p.title}</div>
+          <div class="res-loc">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${p.location}
+          </div>
+          <div class="res-tags">${featLine}</div>
+          <div class="res-footer">
+            <div class="res-agent">
+              <div class="res-avatar" style="background:${ag.color||'#1565C0'}">${ag.init||'ג'}</div>
+              ${ag.name||'סוכן'}
+            </div>
+            <div class="res-actions">
+              <a href="https://wa.me/${WA}?text=${waMsg}" class="res-wa" target="_blank" onclick="event.stopPropagation()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                וואטסאפ
+              </a>
+              <a href="index.html?prop=${p.id}" class="res-detail" onclick="event.stopPropagation()">פרטים</a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openProp(id) {
+  window.location.href = `index.html?prop=${id}`;
+}
+
+// ---- Init ----
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadData();
+  buildFilters();
+  applyFilters();
+
+  // Prefill from URL params (e.g. ?city=תל אביב&type=sale)
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('type')) {
+    const btn = document.querySelector(`.type-btn[data-type="${p.get('type')}"]`);
+    if (btn) setType(btn);
+  }
+  if (p.get('city')) {
+    const pill = [...document.querySelectorAll('.city-pill')].find(b => b.textContent === p.get('city'));
+    if (pill) pill.click();
+  }
+  if (p.get('rooms')) {
+    const btn = document.querySelector(`.room-pill[data-rooms="${p.get('rooms')}"]`);
+    if (btn) setRooms(btn);
+  }
+});
+</script>
+</body>
+</html>
