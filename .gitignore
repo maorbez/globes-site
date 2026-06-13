@@ -48,3 +48,6 @@ admin.html
 .env
 .env.*
 node_modules/
+
+# exception: the real logo (not a screenshot)
+!logo.png
