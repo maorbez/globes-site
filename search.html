@@ -472,7 +472,7 @@ async function loadData() {
   }
   try {
     const r = await fetch('properties.json');
-    if (r.ok) { const d = await r.json(); allProps = d.filter(p => p.active !== false); return; }
+    if (r.ok) { const d = await r.json(); const a = Array.isArray(d) ? d : (d.properties || []); allProps = a.filter(p => p.active !== false); return; }
   } catch(e) {}
   allProps = HARDCODED.filter(p => p.active !== false);
 }

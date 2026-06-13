@@ -84,7 +84,8 @@ async function loadProperties() {
     const r = await fetch('properties.json');
     if (r.ok) {
       const data = await r.json();
-      return data.filter(p => p.active !== false);
+      const arr = Array.isArray(data) ? data : (data.properties || []);
+      return arr.filter(p => p.active !== false);
     }
   } catch(e) {}
   // 3. Hardcoded fallback (COPY — not same reference!)
